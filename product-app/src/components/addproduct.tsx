@@ -20,7 +20,7 @@ function AddProduct() {
     try {
       await addProduct(payload as unknown as Product);
       alert("Product added successfully!");
-      navigate("/listproducts");
+      navigate("../listproducts");
     } catch (err) {
       console.error("Error adding product:", err);
       alert("Failed to add product");
