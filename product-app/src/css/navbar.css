@@ -1,0 +1,30 @@
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;        /* full height */
+  width: 220px;         /* sidebar width */
+  background-color: #343a40; /* dark theme */
+  color: white;
+  padding-top: 60px;    /* adjust if you have a top navbar */
+  border-right: 1px solid #444;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  font-size: 1.2rem;
+  border-bottom: 1px solid #555;
+}
+
+.sidebar-link {
+  color: #bbb;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background-color: #495057;
+  color: #fff;
+  text-decoration: none;
+}

@@ -66,8 +66,8 @@ const handleDelete=async(id: number) => {
                 <td>{p.name}</td>
                 <td>{p.price}</td>
                 <td>
-                    <Link to={`/edit/${p.id}`} className="btn btn-success btn-sm me-2">Edit</Link>
-                    <Link to={`/info/${p.id}`} className="btn btn-info btn-sm me-2">Info</Link>
+                    <Link to={`../edit/${p.id}`} className="btn btn-success btn-sm me-2">Edit</Link>
+                    <Link to={`../info/${p.id}`} className="btn btn-info btn-sm me-2">Info</Link>
                 <button
                   type="button"
                   className="btn btn-danger btn-sm"

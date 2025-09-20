@@ -98,7 +98,7 @@ export default function EditProduct() {
             <input
               id="tags"
               className="form-control"
-              value={(product.tags ?? []).join(", ")}
+               value={Array.isArray(product.tags) ? product.tags.join(", ") : (product.tags ?? "")}
               onChange={(e) =>
                 setProduct({
                   ...product,

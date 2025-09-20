@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type Product from "../model/product";
-import fetchProducts from "../api/productapis";
-import { fetchProductById } from "../api/productapis";
+import fetchProducts, { fetchProductById } from "../api/productapis";
 import { isAxiosError } from "axios";
 
 export default function InfoProduct() {
@@ -16,24 +15,17 @@ export default function InfoProduct() {
 
     (async () => {
       try {
-        // 1) try GET by id
-        const res = await fetchProductById(Number(id));
+        
+        const res = await fetchProductById(id);
         setProduct(res.data);
       } catch (e) {
-        // 2) if 404, fallback: fetch all and find locally
         if (isAxiosError(e) && e.response?.status === 404) {
           try {
             const list = await fetchProducts();
-            // compare both number and string just in case the backend stores id as string
-            const found = list.data.find(
-              (p: Product) => String(p.id) === String(id)
-            );
-            if (found) {
-              setProduct(found);
-            } else {
-              setError(`Product not found (id: ${id})`);
-            }
-          } catch (e2) {
+            const found = list.data.find((p: Product) => String(p.id) === String(id));
+            if (found) setProduct(found);
+            else setError(`Product not found (id: ${id})`);
+          } catch {
             setError("Failed to load products for fallback search.");
           }
         } else {
@@ -49,22 +41,48 @@ export default function InfoProduct() {
   if (error) return <div className="text-danger">{error}</div>;
   if (!product) return <div>No product found.</div>;
 
+  
+  const tagsText = Array.isArray(product.tags)
+    ? product.tags.join(", ")
+    : String(product.tags ?? "");
+
   return (
-    <div className="card" style={{ width: "24rem" }}>
-      <div className="card-body">
-        <h3 className="card-title">Product Info</h3>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item"><strong>ID:</strong> {product.id}</li>
-          <li className="list-group-item"><strong>Name:</strong> {product.name ?? ""}</li>
-          <li className="list-group-item"><strong>Description:</strong> {product.description ?? ""}</li>
-          <li className="list-group-item"><strong>Category:</strong> {product.category ?? ""}</li>
-          <li className="list-group-item">
-            <strong>Tags:</strong> {(product.tags ?? []).join(", ")}
-          </li>
-          <li className="list-group-item"><strong>Price:</strong> {product.price}</li>
-          <li className="list-group-item"><strong>Stock:</strong> {product.stock}</li>
-        </ul>
-      </div>
+  <div className="card" style={{ width: "32rem" }}>
+    <div className="card-body">
+      <h3 className="card-title">Product Info</h3>
+      <table className="table table-bordered">
+        <tbody>
+          <tr>
+            <th scope="row">ID</th>
+            <td>{product.id}</td>
+          </tr>
+          <tr>
+            <th scope="row">Name</th>
+            <td>{product.name ?? ""}</td>
+          </tr>
+          <tr>
+            <th scope="row">Description</th>
+            <td>{product.description ?? ""}</td>
+          </tr>
+          <tr>
+            <th scope="row">Category</th>
+            <td>{product.category ?? ""}</td>
+          </tr>
+          <tr>
+            <th scope="row">Tags</th>
+            <td>{tagsText}</td>
+          </tr>
+          <tr>
+            <th scope="row">Price</th>
+            <td>{product.price}</td>
+          </tr>
+          <tr>
+            <th scope="row">Stock</th>
+            <td>{product.stock}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  );
+  </div>
+);
 }
